@@ -1,74 +1,119 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checky License Generator</title>
     <style>
-        *{width: 100%;}    
+        /*general*/
+        body {font-family: Garamond, Helvetica, Arial, sans-serif;}
+        h3,h4 {padding: 0px 10px; font-family: Helvetica, Ariel, sans-serif !important;}
+
+        /*header*/
+        header {position: fixed; background-color: #fae6f0; color: #017e3f !important; width: 100%; top: 0; left: 0; right: 0;}
+        header > #title {float: left; margin: 0; overflow: hidden; padding: 16px 18px;}
+        header > nav {float: right; margin: 0; padding: 16px 18px;}   
+        header > nav > a {display: inline; text-decoration: none; color: #017e3f; padding: 16px 18px;}
+        header > nav > a:hover {background-color: #fafae6; color: #017e3f;}
+
+        /*license section*/
+        #main {display: flex; flex-wrap: wrap;}
+        #left, #right {width: 50%;}
+        #rawlicense, #finallicense {width: 95%; height: 400px; font-family: 'Courier New', Courier, monospace !important;}
+        #right > h4 {margin-bottom: 0;}
+        #message {color: rgb(113, 113, 113);}
+        #main {background-color: #FAFAE6; padding: 10px 10px;}
+        /*form*/
+        #form {margin: 15px; background-color: #e6e6fa; padding: 15px !important;}
+        #name, #author {transition: 0.5s; padding: 7px; border: 2px solid gray; width: 95%; outline: none; box-sizing: border-box; border-radius: 7px;}
+        #name:focus, #author:focus {border: 2px solid rgb(43, 43, 43); box-sizing: border-box;}
+        #forminput {display: flex; flex-wrap: wrap; padding: 10px; padding-top: 0px !important;}
+        #forminput > div {width: 50%;}
+        #submit,#submit2 {margin-left: 10px; padding: 10px; width: 150px; border: none; background-color: green; color: white; border-radius: 7px; cursor: pointer;}
+        #submit:hover,#submit2:hover {opacity: 80%;}
+        /*#type {padding: 10px;}*/
+        /*#opt1, #opt2 {padding-right: 10px;}*/
+        input[type=radio] {appearance: none; position:relative; top: 4px; transition: 0.2s all linear; margin-right: 5px; border-radius: 50%; border: 4px solid #00be5f; height: 16px; width: 16px;}
+        input[type=radio]:checked {border: 6px solid #00be5f;}
+        
+        /*about section*/
+        #aboutpara, #form {padding: 0px 20px;}
+
+        /*responsive*/
+        @media (max-width: 846px) {
+            #forminput > div {width: 100%;}
+            #left, #right {width: 100%;}
+            #title {align-self: center;}
+        }
+        @media (max-width: 539px) {
+            #title {float: none !important;}
+            header {text-align: center !important;}
+            nav {display: none;}
+        }
     </style>
     <script>
         function generatelicense(){
+            /*getting date*/
             const d = new Date().getFullYear();
             const date = d.toString();
-            var opt = null;
             var type = null;
+            /*getting value of variables*/
             if (document.getElementById("opt1").checked){
-                opt = document.getElementById("opt1").value;
+                type = document.getElementById("opt1").value;
             }
             else if (document.getElementById("opt2").checked){
-                opt = document.getElementById("opt2").value;
+                type = document.getElementById("opt2").value;
             }
             else {
-                opt = document.getElementById("opt1").value;
-            }
-            if (opt == "opt1"){
-                type = "software";
-            }
-            else if (opt == "opt2"){
-                type = "website/ web application";
-            }
-            else {
-                type = "software";
+                type = document.getElementById("opt1").value;
             }
 
             const name = document.getElementById("name").value;
             const author = document.getElementById("author").value;
             var license = document.getElementById("rawlicense").innerHTML;
+            /*adding values to license*/
             license = license.replace('[date]', date);
             license = license.replace('[author]', author);
             license = license.replaceAll(/{}/g, name);
             license = license.replaceAll("[]", type);
-
+            license = license.replaceAll("@", type.toUpperCase())
+            /*copying to the final license*/
             document.getElementById("finallicense").innerHTML = license;
+
+            /*scroll function*/
+            var size = window.matchMedia("(max-width: 539px)")
+            if (size.matches){
+                document.getElementById("submit2").scrollIntoView();
+            }
+            else{
+                document.getElementById("submit").scrollIntoView();
+            }
     }
     </script>
 </head>
 <body>
     <header>
         <div id="title"><span>Checky License Generator</span></div>
-        <nav id="nav"><a href="./">Home</a><a href="#about">About</a><a href="#generator">License Generator</a><a href="#license">License</a></nav>
+        <nav id="nav"><a href="./">Home</a><a href="#about">About</a><a href="#generator">License Generator</a></nav>
     </header>
-    <section id="#about">
-        <h3>About License Generator</h3>
-        <p id="aboutpara">
-            This license generator helps you to generate a simple Checky license for your software/app/ website. Checky license is named after the software <a href="">Checky</a>, which was the first software to be published under this license. <br>
-            Checky is a permissive license, which allows most freedoms and rights to users provided by open source software licenses, however, it also protects the rights of the authors, and ensures their work is not exploited. <br>
-            <br> To generate this license for your software/ website, simply fill in the options, and the license will be automatically generated for you, so you don't have to do the editing yourself! Copy the license after it has been generated!
-            <br>
-        </p>
-    </section>
+    <br><br>
 
     <section id="generator">
-        <h3>Generate License</h3>
+        <!--<h3>Generate License</h3>-->
         <!--<p id="warning">WARNING: DO NOT EDIT THE BRACKETS([], {}, <>) OR REMOVE THEM, EXCEPT IF YOU ARE REMOVING SENTENCE, EXPRESSION OR LINE WHICH INCLUDES THEM. THESE BRACKETS WILL BE REPLACED IN THE LICENSE YOU WILL GET BY THE INFORMATION YOU WILL ENTER.</p>-->
-
-        <label for="type">What do you need this license for? </label><input type="radio" name="type" id="opt1" value="opt1"><label for="opt1">Software/ Desktop Application/ Mobile Application</label><input type="radio" name="type" id="opt2" value="opt2"><label for="opt2">Website/ Web Application</label> <br>
-        <label for="name">Name of your software/ website/ web application: </label> <input type="text" name="name" id="name">
-        <label for="author">Name Of The Author: </label> <input type="text" name="author" id="author">
-        <br><br>
-        <div id="left">
-            <h4>License</h4>
-            <textarea id="rawlicense">
+        <div id="form">
+            <h3>Generate License</h3>
+            <fieldset id="radio"><legend id="type" for="type">What do you need this license for? </legend><input type="radio" name="type" id="opt1" value="software"><label for="opt1" id="opt1">Software/ Desktop Application/ Mobile Application</label><br><input type="radio" name="type" id="opt2" value="website/ web application"><label for="opt2" id="opt2">Website/ Web Application</label></fieldset> <br>
+            <div id="forminput">
+                <div><!--<label for="name">Name of your software/ website/ web application: </label><br>--><fieldset><legend>Name of your software/ website/ web application</legend><input type="text" name="name" id="name"></fieldset></div>
+                <div><!--<label for="author">Name Of The Author: </label><br>--><fieldset><legend>Name of author/ developer</legend><input type="text" name="author" id="author"></fieldset></div>
+            </div>
+            <button id = "submit" type="submit" onclick="generatelicense()">Generate License</button>
+        </div>
+        <section id="main">
+            <div id="left">
+                <h4>License</h4>
+                <textarea id="rawlicense">
                 Copyright © [author] [date]. All Rights Reserved.
 
 PREAMBLE
@@ -93,26 +138,37 @@ YOUR RIGHTS
                 
                 
                 
-THE [] IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR(S) OR COPYRIGHT HOLDER(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE [] OR THE USE OR OTHER DEALINGS IN THE [].
+THE @ IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR(S) OR COPYRIGHT HOLDER(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE @ OR THE USE OR OTHER DEALINGS IN THE @.
                 
 Feel free to contact the author(s) of {} if you have any doubt regarding the license.
 ---END OF LICENSE---
                 
 Thanks for reading the license! Enjoy using {}!
-            </textarea> <br>
-            <button type="submit" onclick="generatelicense()">Generate License</button>
-        </div>
-        <div id="right">
-            <h4>Final License</h4>
-            <p id="message">Make any changes (if you wish to) here and then copy!</p>
-            <textarea name="finallicense" id="finallicense" editable>
-            </textarea>
-        </div>
+                </textarea> <br><br>
+                <button id ="submit2" type="submit" onclick="generatelicense()">Generate License</button>
+            </div>
+            <div id="right">
+                <h4>Final License</h4>
+                <span id="message">Make any changes (if you wish to) here and then copy! Any and all changes are allowed.</span>
+                <textarea name="finallicense" id="finallicense" editable>
+                </textarea>
+            </div>
+        </section>
     </section>
 
-    <section id="license">
-        <h3>The License and the Generator</h3>
-
+    <section id="about">
+        <h3>About License Generator</h3>
+        <p id="aboutpara">
+            This license generator helps you to generate a simple Checky license for your software/app/ website. Checky license is named after the software <a href="">Checky</a>, which was the first software to be published under this license. <br>
+            Checky is a permissive license, which allows most freedoms and rights to users provided by open source software licenses, however, it also protects the rights of the authors, and ensures their work is not exploited. <br>
+            <br> To generate this license for your software/ website, simply fill in the options, and the license will be automatically generated for you, so you don't have to do the editing yourself! Copy the license after it has been generated!
+        </p>
     </section>
+    <br>
+    <hr>
+    <footer>
+        <p>Source code of the generator and the license that governs the use of this website/ web application can be found on <a href="https://github.com/WalrusOnSeaIce/checkylicensegenerator/" target="_blank" rel="noopener">Github</a>.</p>
+        <span id="copyright">Copyright © WalrusOnSeaIce 2024. All Rights Reserved.</span>
+    </footer>
 </body>
 </html>
